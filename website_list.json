@@ -41,7 +41,7 @@
   },
   {
     "name": "Web 实验",
-    "url": "http://202.116.76.22/netdisk/ShowFolderContent.aspx?vm=14web&foldername=%5c&rootindex=0&rootname=%E5%AE%9E%E9%AA%8C%E5%B8%83%E7%BD%AE",
+    "url": "http://172.18.187.11/netdisk/ShowFolderContent.aspx?vm=14web&foldername=%5c&rootindex=1&rootname=%E5%AE%9E%E9%AA%8C%E5%B8%83%E7%BD%AE",
     "rule": ".*"
   }
 ]
