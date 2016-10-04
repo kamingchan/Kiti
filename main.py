@@ -91,7 +91,7 @@ def slave(queue):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
+    # logging.basicConfig(level=logging.DEBUG)
     website_queue = multiprocessing.Queue()
     master_p = multiprocessing.Process(target=master, args=(website_queue, 20), name='Master')
     slave_p = multiprocessing.Process(target=slave, args=(website_queue,), name='Slave')
