@@ -23,24 +23,59 @@
                         <div class="alert alert-dismissible alert-info">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
                             <h4>Warning!</h4>
-                            <p>Best check yo self, you're not looking too good. Nulla vitae elit libero, a pharetra
-                                augue.
-                                Praesent commodo cursus magna,
-                                <a href="#" class="alert-link">vel scelerisque nisl consectetur et</a>.</p></div>
+                            <p>Spam will be deleted without warning and spammer's IP will be blocked by Cat!</p></div>
                         <ul class="list-group">
-                            <li class="list-group-item">
-                                <span class="badge">14</span>Cras justo odio<br>Dapibus ac facilisis in
-                            </li>
-                            <li class="list-group-item">
-                                <span class="badge">2</span>Dapibus ac facilisis in
-                            </li>
-                            <li class="list-group-item">
-                                <span class="badge">1</span>Morbi leo risus
-                            </li>
+                            @foreach( $topics as $topic)
+                                <li class="list-group-item">
+                                    <span class="badge">{{ $topic->created_at }}</span>{{ $topic->getContentWithBy() }}
+                                </li>
+                            @endforeach
                         </ul>
                         <div class="btn-group">
-                            <a class="btn btn-primary btn-large" href="#">New Post</a>
-                            <a class="btn btn-default btn-large" href="#">Show All</a>
+                            <a class="btn btn-primary btn-large" data-toggle="modal" data-target="#post_topic">New
+                                Post</a>
+                            <a class="btn btn-default btn-large" href="topic">Show All</a>
+                        </div>
+                        <div id="post_topic" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Say something...</h4>
+                                    </div>
+                                    <form class="form-horizontal" action="topic" method="post">
+                                        <fieldset>
+                                            {!! csrf_field() !!}
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="author" class="col-lg-2 control-label">Name</label>
+                                                    <div class="col-lg-9">
+                                                        <input type="text" class="form-control" name="author"
+                                                               placeholder="Your name (optional)">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="text"
+                                                           class="col-lg-2 control-label">Text</label>
+                                                    <div class="col-lg-9">
+                                                        <textarea class="form-control" rows="5"
+                                                                  name="text"></textarea>
+                                                        <span class="help-block">World is powered by solitude.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-lg-10 col-lg-offset-2">
+                                                    <button type="submit" class="btn btn-primary">Post Now!</button>
+                                                    <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -57,7 +92,8 @@
                         <div class="alert alert-dismissible alert-warning">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
                             <h4>Warning!</h4>
-                            <p>Best check yo self, you're not looking too good. Nulla vitae elit libero, a pharetra augue.
+                            <p>Best check yo self, you're not looking too good. Nulla vitae elit libero, a pharetra
+                                augue.
                                 Praesent commodo cursus magna,
                                 <a href="#" class="alert-link">vel scelerisque nisl consectetur et</a>.</p></div>
                         <table class="table table-striped table-hover ">
