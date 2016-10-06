@@ -16,23 +16,19 @@ class Website:
         self.re = dic['rule']
 
     def read(self):
-        """
-
-        :rtype: string encoded with UTF-8 or None if fail.
-        """
         try:
             response = requests.get(self.url, headers={
-                'Cookie: ASP.NET_SessionId=cbafrb3ytxi20uzpus3c40cv'
+                'Cookie': 'ASP.NET_SessionId=cbafrb3ytxi20uzpus3c40cv'
             })
             if response.ok:
-                response = response.text
+                response_text = response.text
             else:
                 logging.error('%s response is not ok.' % self.name)
                 return None
         except BaseException as e:
             logging.error(e)
             return None
-        response_re = re.findall(self.re, response)
+        response_re = re.findall(self.re, response_text)
         return " ".join(response_re).encode()
 
 
@@ -72,19 +68,19 @@ def spider_task(website):
     response = website.read()
     if response is None:
         logging.warning('Read from %s fail.' % website.name)
-        pass
+        return None
     logging.info('Read from %s succeed.' % website.name)
     redis_db = redis.StrictRedis()
     last_data = redis_db.get(website.name)
-    if last_data is b'':
+    if last_data is None:
         redis_db.set(website.name, response)
         logging.info('Initialize %s done.' % website.name)
     else:
         if response != last_data:
             msg = '%s又有新内容啦！[点我直达网站！](%s)' % (website.name, website.url)
             logging.info('%s搞了个大新闻。' % website.name)
-            send_notification('%s搞了个大新闻' % website.name, msg)
-            post_big_news(website)
+            # send_notification('%s搞了个大新闻' % website.name, msg)
+            # post_big_news(website)
             redis_db.set(website.name, response)
         else:
             logging.info('%s闷声发大财。' % website.name)
@@ -114,7 +110,7 @@ def slave(queue):
 
 
 if __name__ == '__main__':
-    # logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG)
     website_queue = multiprocessing.Queue()
     master_p = multiprocessing.Process(target=master, args=(website_queue, 20), name='Master')
     slave_p = multiprocessing.Process(target=slave, args=(website_queue,), name='Slave')
