@@ -21,7 +21,14 @@ class Website:
         :rtype: string encoded with UTF-8 or None if fail.
         """
         try:
-            response = requests.get(self.url).text
+            response = requests.get(self.url, headers={
+                'Cookie: ASP.NET_SessionId=cbafrb3ytxi20uzpus3c40cv'
+            })
+            if response.ok:
+                response = response.text
+            else:
+                logging.error('%s response is not ok.' % self.name)
+                return None
         except BaseException as e:
             logging.error(e)
             return None
