@@ -92,64 +92,28 @@
                         <div class="alert alert-dismissible alert-warning">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
                             <h4>Warning!</h4>
-                            <p>Best check yo self, you're not looking too good. Nulla vitae elit libero, a pharetra
-                                augue.
-                                Praesent commodo cursus magna,
-                                <a href="#" class="alert-link">vel scelerisque nisl consectetur et</a>.</p></div>
+                            <p>这只喵将来报道上出了偏差，我是不会负责任的。</p></div>
                         <table class="table table-striped table-hover ">
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Column heading</th>
-                                <th>Column heading</th>
-                                <th>Column heading</th>
+                                <th>Course</th>
+                                <th>Time</th>
+                                <th>URL</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="info">
-                                <td>3</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="success">
-                                <td>4</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="danger">
-                                <td>5</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="warning">
-                                <td>6</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="active">
-                                <td>7</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
+                            @foreach( $big_news as $news)
+                                <tr>
+                                    <td>{{ $news->id }}</td>
+                                    <td>{{ $news->name }}</td>
+                                    <td>{{ $news->created_at }}</td>
+                                    <td><a href="{{ $news->url }}">{{ $news->url }}</a></td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
+                        <a class="btn btn-default btn-large" href="big-news">Show All</a>
                     </div>
                 </div>
             </div>
