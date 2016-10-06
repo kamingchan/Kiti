@@ -11,7 +11,7 @@ class TopicController extends Controller
 {
     public function index()
     {
-        return view('all_topic')-withTopics(topic::all());
+        return view('all_topic')->withTopics(topic::all()->sortByDesc('id')->take(100));
     }
 
     public function store(Request $request)
