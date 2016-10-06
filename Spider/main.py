@@ -50,11 +50,12 @@ def send_notification(title, content=''):
 
 
 def post_big_news(website):
+    token = '_your_token_'
     while True:
         try:
             requests.post(url='http://cat.sysu.space/api/big-news',
                           data={
-                              'token': '_your_token_',
+                              'token': token,
                               'name': website.name,
                               'url': website.url
                           })
