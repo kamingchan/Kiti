@@ -46,6 +46,21 @@ def send_notification(title, content=''):
                 sleep(5)
 
 
+def post_big_news(website):
+    while True:
+        try:
+            requests.post(url='http://cat.sysu.space/api/big-news',
+                          data={
+                              'token': '_your_token_',
+                              'name': website.name,
+                              'url': website.url
+                          })
+            break
+        except BaseException as e:
+            logging.error(e)
+            sleep(5)
+
+
 def spider_task(website):
     response = website.read()
     if response is None:
@@ -62,6 +77,7 @@ def spider_task(website):
             msg = '%s又有新内容啦！[点我直达网站！](%s)' % (website.name, website.url)
             logging.info('%s搞了个大新闻。' % website.name)
             send_notification('%s搞了个大新闻' % website.name, msg)
+            post_big_news(website)
             redis_db.set(website.name, response)
         else:
             logging.info('%s闷声发大财。' % website.name)
