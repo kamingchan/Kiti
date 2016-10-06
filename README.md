@@ -8,6 +8,10 @@
 
 所以我养了这样一只喵，帮我盯着老师的主页。
 
+## Web Branch
+
+为了方便更多人查看网页更新，我用 Laravel 做了一个 [Web 的展示前端](http://cat.sysu.space)，如果你不需要接受微信推送，你可以忽略下面的部署方法。
+
 ## 使用方法
 
 Python 3 with requests
