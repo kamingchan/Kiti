@@ -66,23 +66,23 @@ def post_big_news(website):
 
 
 def spider_task(website):
-    response = website.read()
-    if response is None:
+    res = website.read()
+    if res is None:
         logging.warning('Read from %s fail.' % website.name)
         return None
     logging.info('Read from %s succeed.' % website.name)
     redis_db = redis.StrictRedis()
     last_data = redis_db.get(website.name)
     if last_data is None:
-        redis_db.set(website.name, response)
+        redis_db.set(website.name, res)
         logging.info('Initialize %s done.' % website.name)
     else:
-        if response != last_data:
+        if res != last_data:
             msg = '%s又有新内容啦！[点我直达网站！](%s)' % (website.name, website.url)
             logging.info('%s搞了个大新闻。' % website.name)
-            # send_notification('%s搞了个大新闻' % website.name, msg)
-            # post_big_news(website)
-            redis_db.set(website.name, response)
+            send_notification('%s搞了个大新闻' % website.name, msg)
+            post_big_news(website)
+            redis_db.set(website.name, res)
         else:
             logging.info('%s闷声发大财。' % website.name)
 
