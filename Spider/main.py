@@ -43,7 +43,7 @@ def post_big_news(website):
 
 
 def spider_task(website):
-    res = website.read
+    res = website.read()
     if res is None:
         logging.warning('Read from %s fail.' % website.name)
         return None
