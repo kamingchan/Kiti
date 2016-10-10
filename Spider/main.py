@@ -4,32 +4,9 @@ from time import sleep
 import requests
 from datetime import datetime
 import logging
-import re
 import redis
 import multiprocessing
-
-
-class Website:
-    def __init__(self, dic):
-        self.name = dic['name']
-        self.url = dic['url']
-        self.re = dic['rule']
-
-    def read(self):
-        try:
-            response = requests.get(self.url, headers={
-                'Cookie': 'ASP.NET_SessionId=cbafrb3ytxi20uzpus3c40cv'
-            })
-            if response.ok:
-                response_text = response.text
-            else:
-                logging.error('%s response is not ok.' % self.name)
-                return None
-        except BaseException as e:
-            logging.error(e)
-            return None
-        response_re = re.findall(self.re, response_text)
-        return " ".join(response_re).encode()
+import sysuwebsite as Website
 
 
 def send_notification(title, content=''):
@@ -66,33 +43,47 @@ def post_big_news(website):
 
 
 def spider_task(website):
-    response = website.read()
-    if response is None:
+    res = website.read
+    if res is None:
         logging.warning('Read from %s fail.' % website.name)
         return None
     logging.info('Read from %s succeed.' % website.name)
     redis_db = redis.StrictRedis()
     last_data = redis_db.get(website.name)
     if last_data is None:
-        redis_db.set(website.name, response)
+        redis_db.set(website.name, res)
         logging.info('Initialize %s done.' % website.name)
     else:
-        if response != last_data:
+        if res != last_data:
             msg = '%s又有新内容啦！[点我直达网站！](%s)' % (website.name, website.url)
             logging.info('%s搞了个大新闻。' % website.name)
-            # send_notification('%s搞了个大新闻' % website.name, msg)
-            # post_big_news(website)
-            redis_db.set(website.name, response)
+            send_notification('%s搞了个大新闻' % website.name, msg)
+            post_big_news(website)
+            redis_db.set(website.name, res)
         else:
             logging.info('%s闷声发大财。' % website.name)
 
 
 def master(queue, sleep_time):
     logging.info('Master start.')
-    website_list = list()
-    with open('website_list.json', 'r', encoding='utf-8') as ws_list:
-        for website_data in json.load(ws_list):
-            website_list.append(Website(website_data))
+    website_list = [
+        Website.StaticWebsite('人工智能课件', 'http://smie2.sysu.edu.cn/~ryh/ai/presentation.html'),
+        Website.StaticWebsite('人工智能作业', 'http://smie2.sysu.edu.cn/~ryh/ai/homework.html'),
+        Website.StaticWebsite('人工智能实验', 'http://smie2.sysu.edu.cn/~ryh/ai/lab.html'),
+        Website.StaticWebsite('云计算', 'http://sdcs.sysu.edu.cn/space/080004/ccapp/'),
+        Website.StaticWebsite('无线传感器课件', 'http://sdcs.sysu.edu.cn/space/090058/'),
+        Website.EdinWebsite('移动应用开发', 'http://edin.sysu.edu.cn/wiki/doku.php?id=mad2016'),
+        Website.ElearningWebsite('数据库实验文档',
+                                 'http://elearning.sysu.edu.cn/webapps/blackboard/content/listContent.jsp?course_id=_12034_1&content_id=_248969_1',
+                                 '_248969_1'),
+        Website.ElearningWebsite('数据库实验作业',
+                                 'http://elearning.sysu.edu.cn/webapps/blackboard/content/listContent.jsp?course_id=_12034_1&content_id=_249029_1',
+                                 '_249029_1'),
+        Website.ElearningWebsite('数据库理论作业',
+                                 'http://elearning.sysu.edu.cn/webapps/blackboard/content/listContent.jsp?course_id=_12034_1&content_id=_249159_1',
+                                 '_249159_1'),
+        Website.XiaoxiWebsite('Web 实验', 'http://172.18.187.11')
+    ]
     while True:
         for website in website_list:
             queue.put(website)
