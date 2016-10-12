@@ -108,7 +108,6 @@ class FTPWebsite(Website):
     def read(self):
         ftp = FTP()
         ftp.encoding = self.encoding
-        ftp.set_debuglevel(2)
         ftp.connect(self.ip, self.port)
         ftp.login(self.username, self.password)
         ftp.cwd(self.directory)
