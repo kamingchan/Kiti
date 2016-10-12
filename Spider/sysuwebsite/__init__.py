@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from ftplib import FTP
 
 
 class Website(object):
@@ -92,3 +93,23 @@ class EdinWebsite(Website):
         bs = BeautifulSoup(login_site, 'html.parser')
         a = bs.body.find_all(id='dokuwiki__content')[0]
         return str(a).encode()
+
+
+class FTPWebsite(Website):
+    def __init__(self, name, url, ip, port=21, username='anonymous', password='anonymous', encoding='utf-8', directory='/'):
+        Website.__init__(self, name, url)
+        self.ip = ip
+        self.port = port
+        self.username = username
+        self.password = password
+        self.encoding = encoding
+        self.directory = directory
+
+    def read(self):
+        ftp = FTP()
+        ftp.encoding = self.encoding
+        ftp.set_debuglevel(2)
+        ftp.connect(self.ip, self.port)
+        ftp.login(self.username, self.password)
+        ftp.cwd(self.directory)
+        return ' '.join(ftp.nlst()).encode()
