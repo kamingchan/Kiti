@@ -71,7 +71,7 @@ def master(queue, sleep_time):
         StaticWebsite('人工智能实验', 'http://smie2.sysu.edu.cn/~ryh/ai/lab.html'),
         StaticWebsite('云计算', 'http://sdcs.sysu.edu.cn/space/080004/ccapp/'),
         StaticWebsite('无线传感器课件', 'http://sdcs.sysu.edu.cn/space/090058/'),
-        StaticWebsite('嵌入式作业', 'http://human-robot.sysu.edu.cn/course/嵌入式导论1.htm'),
+        StaticWebsite('嵌入式作业', 'http://human-robot.sysu.edu.cn/course/%e5%b5%8c%e5%85%a5%e5%bc%8f%e5%af%bc%e8%ae%ba1.htm'),
         EdinWebsite('移动应用开发', 'http://edin.sysu.edu.cn/wiki/doku.php?id=mad2016'),
         ElearningWebsite('数据库实验文档',
                          'http://elearning.sysu.edu.cn/webapps/blackboard/content/listContent.jsp?course_id=_12034_1&content_id=_248969_1',
