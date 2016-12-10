@@ -41,6 +41,33 @@ def post_big_news(website):
             sleep(5)
 
 
+def send_codo(website):
+    while True:
+        try:
+            response = requests.post(
+                url="http://api.sysu.space/api/reminder",
+                params={
+                    "token": token,
+                },
+                headers={
+                    "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+                },
+                data={
+                    "channel_id": "211",
+                    "title": website.name,
+                    "content": website.url,
+                    "due": "2015-4-11 12:00:00",
+                    "priority": "2",
+                    "type": "0",
+                }
+            )
+            if json.loads(response.text)['ret'] == 0:
+                break
+        except BaseException as e:
+            logging.error(e)
+            sleep(5)
+
+
 def spider_task(website):
     res = website.read()
     if res is None:
@@ -55,10 +82,11 @@ def spider_task(website):
     else:
         if res != last_data:
             msg = '%s又有新内容啦！[点我直达网站！](%s)' % (website.name, website.url)
+            redis_db.set(website.name, res)
             logging.info('%s搞了个大新闻。' % website.name)
             send_notification('%s搞了个大新闻' % website.name, msg)
             post_big_news(website)
-            redis_db.set(website.name, res)
+            send_codo(website)
         else:
             logging.info('%s闷声发大财。' % website.name)
 
@@ -71,7 +99,8 @@ def master(queue, sleep_time):
         StaticWebsite('人工智能实验', 'http://smie2.sysu.edu.cn/~ryh/ai/lab.html'),
         StaticWebsite('云计算', 'http://sdcs.sysu.edu.cn/space/080004/ccapp/'),
         StaticWebsite('无线传感器课件', 'http://sdcs.sysu.edu.cn/space/090058/'),
-        StaticWebsite('嵌入式作业', 'http://human-robot.sysu.edu.cn/course/%e5%b5%8c%e5%85%a5%e5%bc%8f%e5%af%bc%e8%ae%ba1.htm'),
+        StaticWebsite('嵌入式作业',
+                      'http://human-robot.sysu.edu.cn/course/%e5%b5%8c%e5%85%a5%e5%bc%8f%e5%af%bc%e8%ae%ba1.htm'),
         EdinWebsite('移动应用开发', 'http://edin.sysu.edu.cn/wiki/doku.php?id=mad2016'),
         ElearningWebsite('数据库实验文档',
                          'http://elearning.sysu.edu.cn/webapps/blackboard/content/listContent.jsp?course_id=_12034_1&content_id=_248969_1',
