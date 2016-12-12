@@ -49,9 +49,6 @@ def send_codo(website):
                 params={
                     "token": token,
                 },
-                headers={
-                    "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
-                },
                 data={
                     "channel_id": "211",
                     "title": website.name,
