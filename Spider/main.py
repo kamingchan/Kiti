@@ -53,7 +53,6 @@ def send_codo(website):
                     "channel_id": "211",
                     "title": website.name,
                     "content": website.url,
-                    "due": "2015-4-11 12:00:00",
                     "priority": "2",
                     "type": "0",
                 }
